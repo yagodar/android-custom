@@ -1,18 +1,19 @@
 package com.yagodar.android.custom.loader;
 
-import android.app.Activity;
 import android.content.Loader;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.yagodar.android.custom.fragment.progress.IProgressContext;
+
 /**
  * Created by yagodar on 23.06.2015.
  */
 public class LoaderCallback implements ILoaderCallback {
-    public LoaderCallback(Activity activity, ILoaderCallback srcLoaderCallback) {
-        mActivity = activity;
+    public LoaderCallback(IProgressContext progressContext, ILoaderCallback srcLoaderCallback) {
+        mProgressContext = progressContext;
         mSrcLoaderCallback = srcLoaderCallback;
     }
 
@@ -51,7 +52,7 @@ public class LoaderCallback implements ILoaderCallback {
                 }
             } else {
                 try {
-                    failLoaderResult = mActivity.getResources().getString(loaderResult.getFailMessageId());
+                    failLoaderResult = mProgressContext.getActivity().getResources().getString(loaderResult.getFailMessageId());
                 } catch(Resources.NotFoundException ignored) {}
 
                 if(failLoaderResult == null) {
@@ -59,10 +60,10 @@ public class LoaderCallback implements ILoaderCallback {
                 }
             }
 
-            Toast.makeText(mActivity.getApplicationContext(), failLoaderResult, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mProgressContext.getActivity().getApplicationContext(), failLoaderResult, Toast.LENGTH_SHORT).show();
 
             if(failThrowable != null) {
-                Log.e(mActivity.getClass().getSimpleName(), failThrowable.getMessage(), failThrowable);
+                Log.e(mProgressContext.getClass().getSimpleName(), failThrowable.getMessage(), failThrowable);
             }
         }
 
@@ -74,6 +75,6 @@ public class LoaderCallback implements ILoaderCallback {
         mSrcLoaderCallback.onLoaderReset(loader);
     }
 
-    private Activity mActivity;
+    private IProgressContext mProgressContext;
     private ILoaderCallback mSrcLoaderCallback;
 }

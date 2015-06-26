@@ -1,5 +1,6 @@
 package com.yagodar.android.custom.fragment.progress;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.os.Bundle;
 
@@ -30,6 +31,11 @@ public class LoaderProgressContext implements ILoaderProgressContext {
     public void finishLoading(int loaderId) {
         getLoaderManager().destroyLoader(loaderId);
         setAvailable(true);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return mProgressContext.getActivity();
     }
 
     @Override

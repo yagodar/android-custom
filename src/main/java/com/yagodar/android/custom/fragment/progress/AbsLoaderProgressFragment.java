@@ -15,7 +15,7 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
 
     public AbsLoaderProgressFragment() {
         super();
-        mLoaderCallback = new LoaderCallback(getActivity(), this);
+        mLoaderCallback = new LoaderCallback(this, this);
         mLoaderProgressContext = new LoaderProgressContext(this, mLoaderCallback);
     }
 
