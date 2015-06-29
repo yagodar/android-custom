@@ -11,9 +11,10 @@ import com.yagodar.android.custom.loader.ILoaderCallback;
  */
 public class LoaderProgressContext implements ILoaderProgressContext {
 
-    public LoaderProgressContext(IProgressContext progressContext, ILoaderCallback loaderCallback) {
+    public LoaderProgressContext(IProgressContext progressContext, ILoaderCallback loaderCallback, ILoaderProgressContext srcLoaderProgressContext) {
         mProgressContext = progressContext;
         mLoaderCallback = loaderCallback;
+        mSrcLoaderProgressContext = srcLoaderProgressContext;
     }
 
     @Override
@@ -23,26 +24,32 @@ public class LoaderProgressContext implements ILoaderProgressContext {
 
     @Override
     public void startLoading(int loaderId, Bundle args) {
-        setAvailable(false);
-        getLoaderManager().initLoader(loaderId, args, mLoaderCallback);
+        mSrcLoaderProgressContext.startLoading(loaderId, args, false);
+    }
+
+    @Override
+    public void startLoading(int loaderId, Bundle args, boolean hidden) {
+        mSrcLoaderProgressContext.setAvailable(hidden);
+        mSrcLoaderProgressContext.getLoaderManager().initLoader(loaderId, args, mLoaderCallback);
     }
 
     @Override
     public void finishLoading(int loaderId) {
-        getLoaderManager().destroyLoader(loaderId);
-        setAvailable(true);
+        mSrcLoaderProgressContext.getLoaderManager().destroyLoader(loaderId);
+        mSrcLoaderProgressContext.setAvailable(true);
     }
 
     @Override
     public Activity getActivity() {
-        return mProgressContext.getActivity();
+        return mSrcLoaderProgressContext.getActivity();
     }
 
     @Override
     public LoaderManager getLoaderManager() {
-        return mProgressContext.getLoaderManager();
+        return mSrcLoaderProgressContext.getLoaderManager();
     }
 
+    private ILoaderProgressContext mSrcLoaderProgressContext;
     private IProgressContext mProgressContext;
     private ILoaderCallback mLoaderCallback;
 }

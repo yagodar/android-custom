@@ -9,6 +9,8 @@ public interface ILoaderContext extends ILoaderManagerContext {
 
     void startLoading(int loaderId, Bundle args);
 
+    void startLoading(int loaderId, Bundle args, boolean hidden);
+
     void finishLoading(int loaderId);
 
 }

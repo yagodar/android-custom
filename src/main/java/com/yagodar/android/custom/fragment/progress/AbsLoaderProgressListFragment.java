@@ -15,7 +15,7 @@ public abstract class AbsLoaderProgressListFragment extends ProgressListFragment
     public AbsLoaderProgressListFragment() {
         super();
         mLoaderCallback = new LoaderCallback(this, this);
-        mLoaderProgressContext = new LoaderProgressContext(this, mLoaderCallback);
+        mLoaderProgressContext = new LoaderProgressContext(this, mLoaderCallback, this);
     }
 
     @Override
@@ -26,6 +26,11 @@ public abstract class AbsLoaderProgressListFragment extends ProgressListFragment
     @Override
     public void startLoading(int loaderId, Bundle args) {
         mLoaderProgressContext.startLoading(loaderId, args);
+    }
+
+    @Override
+    public void startLoading(int loaderId, Bundle args, boolean hidden) {
+        mLoaderProgressContext.startLoading(loaderId, args, hidden);
     }
 
     @Override
