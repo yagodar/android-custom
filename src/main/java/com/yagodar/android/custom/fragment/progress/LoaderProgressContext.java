@@ -49,7 +49,7 @@ public class LoaderProgressContext implements ILoaderProgressContext {
         return mSrcLoaderProgressContext.getLoaderManager();
     }
 
-    private ILoaderProgressContext mSrcLoaderProgressContext;
     private IProgressContext mProgressContext;
     private ILoaderCallback mLoaderCallback;
+    private ILoaderProgressContext mSrcLoaderProgressContext;
 }

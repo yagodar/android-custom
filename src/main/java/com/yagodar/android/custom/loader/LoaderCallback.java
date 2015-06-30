@@ -6,20 +6,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.yagodar.android.custom.fragment.progress.ILoaderProgressContext;
 import com.yagodar.android.custom.fragment.progress.IProgressContext;
 
 /**
  * Created by yagodar on 23.06.2015.
  */
 public class LoaderCallback implements ILoaderCallback {
-    public LoaderCallback(IProgressContext progressContext, ILoaderCallback srcLoaderCallback) {
+    public LoaderCallback(IProgressContext progressContext, ILoaderCallback srcLoaderCallback, ILoaderProgressContext srcLoaderProgressContext) {
         mProgressContext = progressContext;
         mSrcLoaderCallback = srcLoaderCallback;
+        mSrcLoaderProgressContext = srcLoaderProgressContext;
     }
 
     @Override
     public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mSrcLoaderCallback.onLoaderResult(loader, loaderResult);
+        mSrcLoaderProgressContext.finishLoading(loader.getId());
     }
 
     @Override
@@ -67,14 +69,13 @@ public class LoaderCallback implements ILoaderCallback {
             }
         }
 
-        onLoaderResult(loader, loaderResult);
+        mSrcLoaderCallback.onLoaderResult(loader, loaderResult);
     }
 
     @Override
-    public void onLoaderReset(Loader<LoaderResult> loader) {
-        mSrcLoaderCallback.onLoaderReset(loader);
-    }
+    public void onLoaderReset(Loader<LoaderResult> loader) {}
 
     private IProgressContext mProgressContext;
     private ILoaderCallback mSrcLoaderCallback;
+    private ILoaderProgressContext mSrcLoaderProgressContext;
 }

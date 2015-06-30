@@ -15,7 +15,7 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
 
     public AbsLoaderProgressFragment() {
         super();
-        mLoaderCallback = new LoaderCallback(this, this);
+        mLoaderCallback = new LoaderCallback(this, this, this);
         mLoaderProgressContext = new LoaderProgressContext(this, mLoaderCallback, this);
     }
 
@@ -42,6 +42,16 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
     @Override
     public void onLoadFinished(Loader<LoaderResult> loader, LoaderResult loaderResult) {
         mLoaderCallback.onLoadFinished(loader, loaderResult);
+    }
+
+    @Override
+    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
+        mLoaderCallback.onLoaderResult(loader, loaderResult);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<LoaderResult> loader) {
+        mLoaderCallback.onLoaderReset(loader);
     }
 
     private LoaderProgressContext mLoaderProgressContext;
