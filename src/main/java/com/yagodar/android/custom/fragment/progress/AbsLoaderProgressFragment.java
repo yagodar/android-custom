@@ -35,8 +35,8 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
     }
 
     @Override
-    public void finishLoading(int loaderId) {
-        mLoaderProgressContext.finishLoading(loaderId);
+    public void finishLoading(int loaderId, boolean hidden) {
+        mLoaderProgressContext.finishLoading(loaderId, hidden);
     }
 
     @Override

@@ -84,10 +84,12 @@ public class ProgressFragment extends Fragment implements IProgressContext {
     }
 
     protected void setContentShown(boolean shown, boolean animate) {
-        ensureContainers();
         if (mContentShown == shown) {
             return;
         }
+
+        ensureContainers();
+
         mContentShown = shown;
         if (shown) {
             if (animate) {

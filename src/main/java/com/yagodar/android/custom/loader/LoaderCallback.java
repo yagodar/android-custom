@@ -21,7 +21,7 @@ public class LoaderCallback implements ILoaderCallback {
 
     @Override
     public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mSrcLoaderProgressContext.finishLoading(loader.getId());
+        mSrcLoaderProgressContext.finishLoading(loader.getId(), loaderResult.isHidden());
     }
 
     @Override
