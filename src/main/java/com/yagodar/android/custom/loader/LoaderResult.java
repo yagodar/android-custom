@@ -19,14 +19,5 @@ public class LoaderResult extends OperationResult<Object> {
         mNotifyDataSet = needNotifyDataSetChanged;
     }
 
-    boolean isHidden() {
-        return mHidden;
-    }
-
-    void setHidden(boolean hidden) {
-        mHidden = hidden;
-    }
-
     private boolean mNotifyDataSet;
-    private boolean mHidden;
 }

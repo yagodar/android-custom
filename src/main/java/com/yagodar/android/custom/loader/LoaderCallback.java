@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.yagodar.android.custom.fragment.progress.ILoaderProgressContext;
 import com.yagodar.android.custom.fragment.progress.IProgressContext;
 
+import java.util.Set;
+
 /**
  * Created by yagodar on 23.06.2015.
  */
@@ -21,7 +23,7 @@ public class LoaderCallback implements ILoaderCallback {
 
     @Override
     public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mSrcLoaderProgressContext.finishLoading(loader.getId(), loaderResult.isHidden());
+        mSrcLoaderProgressContext.finishLoading(loader.getId());
     }
 
     @Override
@@ -36,33 +38,38 @@ public class LoaderCallback implements ILoaderCallback {
         }
 
         if (!loaderResult.isSuccessful()) {
-            String failLoaderResult = null;
-
-            Integer failMessageId = loaderResult.getFailMessageId();
-            String failMessage = loaderResult.getFailMessage();
             Throwable failThrowable = loaderResult.getFailThrowable();
 
-            if(failMessageId == null) {
-                if (failMessage == null) {
-                    if (failThrowable == null) {
-                        failLoaderResult = "FAIL";
+            Set<Integer> hiddenLoaderIdSet = mSrcLoaderProgressContext.getHiddenLoaderIdSet();
+            if(!hiddenLoaderIdSet.contains(loader.getId())) {
+                String failLoaderResult = null;
+
+                Integer failMessageId = loaderResult.getFailMessageId();
+                String failMessage = loaderResult.getFailMessage();
+
+                if (failMessageId == null) {
+                    if (failMessage == null) {
+                        if (failThrowable == null) {
+                            failLoaderResult = "FAIL";
+                        } else {
+                            failLoaderResult = failThrowable.getMessage();
+                        }
                     } else {
-                        failLoaderResult = failThrowable.getMessage();
+                        failLoaderResult = failMessage;
                     }
                 } else {
-                    failLoaderResult = failMessage;
-                }
-            } else {
-                try {
-                    failLoaderResult = mProgressContext.getActivity().getResources().getString(loaderResult.getFailMessageId());
-                } catch(Resources.NotFoundException ignored) {}
+                    try {
+                        failLoaderResult = mProgressContext.getActivity().getResources().getString(loaderResult.getFailMessageId());
+                    } catch (Resources.NotFoundException ignored) {
+                    }
 
-                if(failLoaderResult == null) {
-                    failLoaderResult = "FAIL";
+                    if (failLoaderResult == null) {
+                        failLoaderResult = "FAIL";
+                    }
                 }
+
+                Toast.makeText(mProgressContext.getActivity().getApplicationContext(), failLoaderResult, Toast.LENGTH_SHORT).show();
             }
-
-            Toast.makeText(mProgressContext.getActivity().getApplicationContext(), failLoaderResult, Toast.LENGTH_SHORT).show();
 
             if(failThrowable != null) {
                 Log.e(mProgressContext.getClass().getSimpleName(), failThrowable.getMessage(), failThrowable);

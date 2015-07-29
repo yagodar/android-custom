@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.os.Bundle;
 
-import com.yagodar.android.custom.loader.AbsAsyncTaskLoader;
 import com.yagodar.android.custom.loader.ILoaderCallback;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by yagodar on 23.06.2015.
@@ -16,6 +18,17 @@ public class LoaderProgressContext implements ILoaderProgressContext {
         mProgressContext = progressContext;
         mLoaderCallback = loaderCallback;
         mSrcLoaderProgressContext = srcLoaderProgressContext;
+        mHiddenLoaderIdSet = new HashSet<>();
+    }
+
+    @Override
+    public void startLoading(int loaderId, Bundle args, boolean hidden) {
+        if(hidden) {
+            mHiddenLoaderIdSet.add(loaderId);
+        } else {
+            mSrcLoaderProgressContext.setAvailable(false);
+        }
+        mSrcLoaderProgressContext.getLoaderManager().initLoader(loaderId, args, mLoaderCallback);
     }
 
     @Override
@@ -24,31 +37,25 @@ public class LoaderProgressContext implements ILoaderProgressContext {
     }
 
     @Override
+    public Set<Integer> getHiddenLoaderIdSet() {
+        return mHiddenLoaderIdSet;
+    }
+
+    @Override
     public void startLoading(int loaderId, Bundle args) {
         mSrcLoaderProgressContext.startLoading(loaderId, args, false);
     }
 
     @Override
-    public void startLoading(int loaderId, Bundle args, boolean hidden) {
-        if(!hidden) {
-            mSrcLoaderProgressContext.setAvailable(false);
-        }
-        if(args == null) {
-            args = new Bundle();
-        }
-        args.putBoolean(AbsAsyncTaskLoader.HIDDEN_LOADER_TAG, hidden);
-        mSrcLoaderProgressContext.getLoaderManager().initLoader(loaderId, args, mLoaderCallback);
-    }
-
-    @Override
-    public void finishLoading(int loaderId, boolean hidden) {
+    public void finishLoading(int loaderId) {
         try {
             mSrcLoaderProgressContext.getLoaderManager().destroyLoader(loaderId);
         } catch(Exception e) {
-            System.out.print("sdfsdf");
+            System.out.print("sdfsdf"); //TODO del
         }
-
-        if(!hidden) {
+        if(mHiddenLoaderIdSet.contains(loaderId)) {
+            mHiddenLoaderIdSet.remove(loaderId);
+        } else {
             mSrcLoaderProgressContext.setAvailable(true);
         }
     }
@@ -66,4 +73,5 @@ public class LoaderProgressContext implements ILoaderProgressContext {
     private IProgressContext mProgressContext;
     private ILoaderCallback mLoaderCallback;
     private ILoaderProgressContext mSrcLoaderProgressContext;
+    private Set<Integer> mHiddenLoaderIdSet;
 }

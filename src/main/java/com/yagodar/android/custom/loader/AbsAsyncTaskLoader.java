@@ -31,8 +31,6 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     @Override
     public void deliverResult(LoaderResult data) {
         mData = data;
-        mData.setHidden(mArgs.getBoolean(HIDDEN_LOADER_TAG));
-
         if (isStarted()) {
             super.deliverResult(data);
         }
@@ -65,7 +63,6 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     private Bundle mArgs;
     private LoaderResult mData;
 
-    public static String HIDDEN_LOADER_TAG = "hidden";
     public static String DELAY_START_MILLISECONDS_TAG = "delay";
 
     private static final String LOG_TAG = AbsAsyncTaskLoader.class.getSimpleName();
