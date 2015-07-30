@@ -21,7 +21,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     @Override
     public LoaderResult loadInBackground() {
         try {
-            TimeUnit.MILLISECONDS.sleep(mArgs.getLong(DELAY_START_MILLISECONDS_TAG, 0L));
+            TimeUnit.MILLISECONDS.sleep(mArgs == null ? 0L : mArgs.getLong(DELAY_START_MILLISECONDS_TAG, 0L));
         } catch (InterruptedException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
         }
