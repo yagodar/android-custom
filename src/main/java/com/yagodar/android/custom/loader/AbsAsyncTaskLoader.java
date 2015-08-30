@@ -1,8 +1,8 @@
 package com.yagodar.android.custom.loader;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;

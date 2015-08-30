@@ -1,7 +1,7 @@
 package com.yagodar.android.custom.fragment.progress;
 
-import android.content.Loader;
 import android.os.Bundle;
+import android.support.v4.content.Loader;
 
 import com.yagodar.android.custom.loader.ILoaderCallback;
 import com.yagodar.android.custom.loader.LoaderCallback;

@@ -1,20 +1,13 @@
 package com.yagodar.android.custom.fragment.progress;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 
 import com.yagodar.android.custom.R;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 /**
@@ -133,13 +126,7 @@ public class ProgressFragment extends Fragment implements IProgressContext {
         }
 
         View root = getView();
-        try {
-            if (root == null) {
-                throw new IllegalStateException("Content view not yet created!");
-            }
-        }
-        catch(Exception e) {
-            f(getClass().getSimpleName(), e.getMessage(), true);
+        if (root == null) {
             throw new IllegalStateException("Content view not yet created!");
         }
 
@@ -149,47 +136,6 @@ public class ProgressFragment extends Fragment implements IProgressContext {
             throw new IllegalStateException("Can't be used with a custom content view!");
         }
     }
-
-    public static void f(String logTag, String msg, boolean printStackTrace) {
-        File file = new File(LOG_FILE_PATH);
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-            bw.append("[" + new SimpleDateFormat("hh:mm:ss").format(new Date()) + "]\t[" + logTag + "]\t" + msg + "\n");
-
-            if(printStackTrace) {
-                bw.append(getStackTraceStr());
-            }
-
-            bw.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static String getStackTraceStr() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-        String stackTraceOut = "\tStack trace:\n";
-        if(stackTrace != null && stackTrace.length > 0) {
-            for (int i = 0; i < stackTrace.length; i++) {
-                stackTraceOut += "\tline [" +  stackTrace[i].getLineNumber() + "]\t" + stackTrace[i].getClassName() + "." + stackTrace[i].getMethodName() + " <- \n";
-            }
-
-            stackTraceOut = stackTraceOut.substring(0, stackTraceOut.length() - 5);
-        }
-        else {
-            stackTraceOut += "[empty]";
-        }
-
-        return stackTraceOut;
-    }
-
-    private final static String LOG_FILE_PATH = "sdcard/" + new SimpleDateFormat("yyyy.MM.dd").format(new Date()) + ".log";
 
     protected View mContentView;
     protected View mProgressContainer;

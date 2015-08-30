@@ -1,8 +1,8 @@
 package com.yagodar.android.custom.loader;
 
-import android.content.Loader;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.widget.Toast;
 

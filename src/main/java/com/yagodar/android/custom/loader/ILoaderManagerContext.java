@@ -1,7 +1,7 @@
 package com.yagodar.android.custom.loader;
 
 import android.app.Activity;
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 
 /**
  * Created by yagodar on 23.06.2015.
