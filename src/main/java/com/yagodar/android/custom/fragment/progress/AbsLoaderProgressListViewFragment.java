@@ -62,5 +62,4 @@ public abstract class AbsLoaderProgressListViewFragment extends ProgressListView
 
     private LoaderProgressContext mLoaderProgressContext;
     private LoaderCallback mLoaderCallback;
-
 }

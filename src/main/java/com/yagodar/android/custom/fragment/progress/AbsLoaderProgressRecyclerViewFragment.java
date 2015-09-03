@@ -10,11 +10,11 @@ import com.yagodar.android.custom.loader.LoaderResult;
 import java.util.Set;
 
 /**
- * Created by yagodar on 18.06.2015.
+ * Created by yagodar on 04.09.2015.
  */
-public abstract class AbsLoaderProgressFragment extends ProgressFragment implements ILoaderProgressContext, ILoaderCallback {
+public abstract class AbsLoaderProgressRecyclerViewFragment extends ProgressRecyclerViewFragment implements ILoaderProgressContext, ILoaderCallback {
 
-    public AbsLoaderProgressFragment() {
+    public AbsLoaderProgressRecyclerViewFragment() {
         super();
         mLoaderCallback = new LoaderCallback(this, this, this);
         mLoaderProgressContext = new LoaderProgressContext(this, mLoaderCallback, this);

@@ -1,25 +1,26 @@
 package com.yagodar.android.custom.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.BaseAdapter;
+import android.view.ViewGroup;
 
 import com.yagodar.essential.model.ListModel;
 import com.yagodar.essential.model.Model;
 
 /**
- * Created by yagodar on 24.06.2015.
+ * Created by yagodar on 04.09.2015.
  */
-public abstract class AbsListAdapter<T extends Model> extends BaseAdapter {
-    public AbsListAdapter(Context context, View.OnClickListener onClickListener, ListModel<T> listModel) {
+public abstract class AbsRecyclerViewAdapter<M extends Model, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
+
+    public AbsRecyclerViewAdapter(Context context, ListModel<M> listModel) {
         mLayoutInflater = LayoutInflater.from(context);
-        mOnClickListener = onClickListener;
+        //setHasStableIds(true); TODO WTF!!
         setListModel(listModel);
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         if(mListModel != null && mListModel.isLoaded()) {
             return mListModel.getCount();
         }
@@ -28,24 +29,21 @@ public abstract class AbsListAdapter<T extends Model> extends BaseAdapter {
     }
 
     @Override
-    public T getItem(int position) {
-        return mListModel.getModel(position);
-    }
-
-    @Override
     public long getItemId(int position) {
         return mListModel.getModel(position).getId();
     }
+
+    @Override
+    public abstract H onCreateViewHolder(ViewGroup viewGroup, int i);
+
+    @Override
+    public abstract void onBindViewHolder(H viewHolder, int i);
 
     protected LayoutInflater getLayoutInflater() {
         return mLayoutInflater;
     }
 
-    protected View.OnClickListener getOnClickListener() {
-        return mOnClickListener;
-    }
-
-    protected void setListModel(ListModel<T> listModel) {
+    protected void setListModel(ListModel<M> listModel) {
         if(listModel == null) {
             throw new IllegalArgumentException("List Model must not be null!");
         }
@@ -55,11 +53,10 @@ public abstract class AbsListAdapter<T extends Model> extends BaseAdapter {
         }
     }
 
-    protected ListModel<T> getListModel() {
+    protected ListModel<M> getListModel() {
         return mListModel;
     }
 
     private final LayoutInflater mLayoutInflater;
-    private final View.OnClickListener mOnClickListener;
-    private ListModel<T> mListModel;
+    private ListModel<M> mListModel;
 }
