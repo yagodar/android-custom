@@ -12,16 +12,16 @@ import com.yagodar.android.custom.R;
 /**
  * Created by yagodar on 18.06.2015.
  */
-public class ProgressListFragment extends ProgressFragment {
+public class ProgressListViewFragment extends ProgressFragment {
 
-    public ProgressListFragment() {
+    public ProgressListViewFragment() {
         super();
     }
 
     @Override
     public void onDestroyView() {
         mHandler.removeCallbacks(mRequestFocus);
-        mList = null;
+        mListView = null;
         mEmptyView = null;
         super.onDestroyView();
     }
@@ -46,16 +46,16 @@ public class ProgressListFragment extends ProgressFragment {
     protected void ensureContent() {
         super.ensureContent();
 
-        if (mList != null && mList.equals(mContentView)) {
+        if (mListView != null && mListView.equals(mContentView)) {
             return;
         }
 
         if(mContentView != null) {
-            mList = (ListView) mContentView;
-            mList.setOnItemClickListener(mOnClickListener);
-            if (mAdapter != null) {
-                ListAdapter adapter = mAdapter;
-                mAdapter = null;
+            mListView = (ListView) mContentView;
+            mListView.setOnItemClickListener(mOnClickListener);
+            if (mListAdapter != null) {
+                ListAdapter adapter = mListAdapter;
+                mListAdapter = null;
                 setListAdapter(adapter);
             } else {
                 // We are starting without an adapter, so assume we won't
@@ -86,17 +86,17 @@ public class ProgressListFragment extends ProgressFragment {
      * Get the ListAdapter associated with this activity's ListView.
      */
     public ListAdapter getListAdapter() {
-        return mAdapter;
+        return mListAdapter;
     }
 
     /**
      * Provide the cursor for the list view.
      */
     public void setListAdapter(ListAdapter listAdapter) {
-        boolean hadAdapter = mAdapter != null;
-        mAdapter = listAdapter;
-        if (mList != null) {
-            mList.setAdapter(listAdapter);
+        boolean hadAdapter = mListAdapter != null;
+        mListAdapter = listAdapter;
+        if (mListView != null) {
+            mListView.setAdapter(listAdapter);
             if (!mContentShown && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
                 // adapter.  It is now time to show it.
@@ -113,7 +113,7 @@ public class ProgressListFragment extends ProgressFragment {
      */
     public void setSelection(int position) {
         ensure();
-        mList.setSelection(position);
+        mListView.setSelection(position);
     }
 
     /**
@@ -121,7 +121,7 @@ public class ProgressListFragment extends ProgressFragment {
      */
     public int getSelectedItemPosition() {
         ensure();
-        return mList.getSelectedItemPosition();
+        return mListView.getSelectedItemPosition();
     }
 
     /**
@@ -129,14 +129,14 @@ public class ProgressListFragment extends ProgressFragment {
      */
     public long getSelectedItemId() {
         ensure();
-        return mList.getSelectedItemId();
+        return mListView.getSelectedItemId();
     }
 
     /**
      * Get the activity's list view widget.
      */
     public ListView getListView() {
-        return mList;
+        return mListView;
     }
 
     public void setEmptyText(int resId) {
@@ -165,18 +165,18 @@ public class ProgressListFragment extends ProgressFragment {
             throw new IllegalStateException("Can't be used with a custom content view!");
         }
 
-        mList.setEmptyView(mEmptyView);
+        mListView.setEmptyView(mEmptyView);
     }
 
-    private ListAdapter mAdapter;
-    private ListView mList;
+    private ListAdapter mListAdapter;
+    private ListView mListView;
     private TextView mEmptyView;
 
     final private Handler mHandler = new Handler();
 
     final private Runnable mRequestFocus = new Runnable() {
         public void run() {
-            mList.focusableViewAvailable(mList);
+            mListView.focusableViewAvailable(mListView);
         }
     };
 
