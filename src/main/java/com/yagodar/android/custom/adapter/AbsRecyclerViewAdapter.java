@@ -3,6 +3,7 @@ package com.yagodar.android.custom.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.yagodar.essential.model.ListModel;
@@ -11,11 +12,11 @@ import com.yagodar.essential.model.Model;
 /**
  * Created by yagodar on 04.09.2015.
  */
-public abstract class AbsRecyclerViewAdapter<M extends Model, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
+public abstract class AbsRecyclerViewAdapter<M extends Model, H extends AbsRecyclerViewAdapter.AbsViewHolder<M>> extends RecyclerView.Adapter<H> {
 
-    public AbsRecyclerViewAdapter(Context context, ListModel<M> listModel) {
+    public AbsRecyclerViewAdapter(Context context, View.OnClickListener onClickListener, ListModel<M> listModel) {
         mLayoutInflater = LayoutInflater.from(context);
-        //setHasStableIds(true); TODO WTF!!
+        mOnClickListener = onClickListener;
         setListModel(listModel);
     }
 
@@ -34,13 +35,23 @@ public abstract class AbsRecyclerViewAdapter<M extends Model, H extends Recycler
     }
 
     @Override
-    public abstract H onCreateViewHolder(ViewGroup viewGroup, int i);
+    public void onBindViewHolder(H viewHolder, int position) {
+        viewHolder.onBind(getItem(position), position);
+    }
 
     @Override
-    public abstract void onBindViewHolder(H viewHolder, int i);
+    public abstract H onCreateViewHolder(ViewGroup parent, int viewType);
+
+    public M getItem(int position) {
+        return mListModel.getModel(position);
+    }
 
     protected LayoutInflater getLayoutInflater() {
         return mLayoutInflater;
+    }
+
+    protected View.OnClickListener getOnClickListener() {
+        return mOnClickListener;
     }
 
     protected void setListModel(ListModel<M> listModel) {
@@ -57,6 +68,16 @@ public abstract class AbsRecyclerViewAdapter<M extends Model, H extends Recycler
         return mListModel;
     }
 
+    public static abstract class AbsViewHolder<M> extends RecyclerView.ViewHolder {
+
+        public AbsViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public abstract void onBind(M model, int position);
+    }
+
     private final LayoutInflater mLayoutInflater;
+    private final View.OnClickListener mOnClickListener;
     private ListModel<M> mListModel;
 }
