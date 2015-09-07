@@ -17,6 +17,7 @@ public abstract class AbsRecyclerViewAdapter<M extends Model, H extends AbsRecyc
     public AbsRecyclerViewAdapter(Context context, View.OnClickListener onClickListener, ListModel<M> listModel) {
         mLayoutInflater = LayoutInflater.from(context);
         mOnClickListener = onClickListener;
+        setHasStableIds(true);
         setListModel(listModel);
     }
 
