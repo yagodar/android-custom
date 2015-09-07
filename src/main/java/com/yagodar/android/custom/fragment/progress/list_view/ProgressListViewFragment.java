@@ -1,4 +1,4 @@
-package com.yagodar.android.custom.fragment.progress;
+package com.yagodar.android.custom.fragment.progress.list_view;
 
 import android.os.Handler;
 import android.view.View;
@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.yagodar.android.custom.R;
+import com.yagodar.android.custom.fragment.progress.common_view.ProgressFragment;
 
 /**
  * Created by yagodar on 18.06.2015.

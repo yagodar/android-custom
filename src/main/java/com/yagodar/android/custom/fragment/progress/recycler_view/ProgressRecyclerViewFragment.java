@@ -1,11 +1,13 @@
-package com.yagodar.android.custom.fragment.progress;
+package com.yagodar.android.custom.fragment.progress.recycler_view;
 
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.yagodar.android.custom.R;
+import com.yagodar.android.custom.fragment.progress.common_view.ProgressFragment;
 
 /**
  * Created by yagodar on 03.09.2015.
@@ -43,9 +45,6 @@ public class ProgressRecyclerViewFragment extends ProgressFragment {
 
         if(mContentView != null) {
             mRecyclerView = (RecyclerView) mContentView;
-            mRecyclerView.setHasFixedSize(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-            mRecyclerView.setLayoutManager(layoutManager);
             if (mRecyclerAdapter != null) {
                 RecyclerView.Adapter adapter = mRecyclerAdapter;
                 mRecyclerAdapter = null;
@@ -57,7 +56,12 @@ public class ProgressRecyclerViewFragment extends ProgressFragment {
             }
             mHandler.post(mRequestFocus);
         } else {
-            setContentView(R.layout.progress_fragment_recycle_view);
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            RecyclerView recyclerView = (RecyclerView) layoutInflater.inflate(R.layout.progress_fragment_recycle_view, null);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            setContentView(recyclerView);
         }
     }
 
