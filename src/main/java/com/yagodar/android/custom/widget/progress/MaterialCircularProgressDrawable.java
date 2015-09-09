@@ -28,9 +28,9 @@ import java.util.ArrayList;
 
 /**
  * Created by yagodar on 08.09.2015.
- * Copy-paste of hiden class android.support.v4.widget.MaterialProgressDrawable
+ * Copy-paste of hiden class android.support.v4.widget.MaterialCircularProgressDrawable
  */
-public class MaterialProgressDrawable extends Drawable implements Animatable {
+public class MaterialCircularProgressDrawable extends Drawable implements Animatable {
     private static final Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
     private static final Interpolator MATERIAL_INTERPOLATOR = new FastOutSlowInInterpolator();
 
@@ -97,7 +97,7 @@ public class MaterialProgressDrawable extends Drawable implements Animatable {
     private double mHeight;
     boolean mFinishing;
 
-    public MaterialProgressDrawable(Context context, View parent) {
+    public MaterialCircularProgressDrawable(Context context, View parent) {
         mParent = parent;
         mResources = context.getResources();
 
@@ -127,8 +127,8 @@ public class MaterialProgressDrawable extends Drawable implements Animatable {
      * Set the overall size for the progress spinner. This updates the radius
      * and stroke width of the ring.
      *
-     * @param size One of {@link MaterialProgressDrawable.LARGE} or
-     *            {@link MaterialProgressDrawable.DEFAULT}
+     * @param size One of {@link MaterialCircularProgressDrawable#LARGE MaterialCircularProgressDrawable.LARGE} or
+     *            {@link MaterialCircularProgressDrawable#DEFAULT MaterialCircularProgressDrawable.DEFAULT}
      */
     public void updateSizes(@ProgressDrawableSize int size) {
         if (size == LARGE) {

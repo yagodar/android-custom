@@ -11,8 +11,9 @@
         android:visibility="gone"
         android:gravity="center">
 
-        <com.yagodar.android.custom.widget.progress.MaterialProgressBar
+        <com.yagodar.android.custom.widget.progress.MaterialProgressBar2
             android:id="@android:id/progress"
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

@@ -10,22 +10,22 @@ import android.view.View;
  * Created by yagodar on 09.09.2015.
  * Thanks to <a href="http://stackoverflow.com/a/29032403">Dmide</a>
  */
-public class MaterialProgressBar extends View {
+public class MaterialProgressBar2 extends View {
 
-    private MaterialProgressDrawable mDrawable;
+    private MaterialCircularProgressDrawable mDrawable;
 
-    public MaterialProgressBar(Context context) {
+    public MaterialProgressBar2(Context context) {
         this(context, null);
     }
 
-    public MaterialProgressBar(Context context, AttributeSet attrs) {
+    public MaterialProgressBar2(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MaterialProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MaterialProgressBar2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mDrawable = new MaterialProgressDrawable(context, this);
+        mDrawable = new MaterialCircularProgressDrawable(context, this);
         mDrawable.setCallback(this);
         if (getVisibility() == VISIBLE) {
             mDrawable.start();
