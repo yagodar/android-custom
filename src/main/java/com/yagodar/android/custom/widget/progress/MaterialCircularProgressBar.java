@@ -30,6 +30,7 @@ public class MaterialCircularProgressBar extends ImageView {
     private void initProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
 
         //TODO USE MATERIALISH instead https://github.com/pnikosis/materialish-progress
+        //TODO JUST USE IT!
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaterialCircularProgressBar, defStyleAttr, 0);
         mProgress = a.getInt(R.styleable.MaterialCircularProgressBar_progress, 0);
