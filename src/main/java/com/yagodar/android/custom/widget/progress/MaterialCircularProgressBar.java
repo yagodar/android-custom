@@ -22,7 +22,7 @@ import com.yagodar.android.custom.R;
 
 /**
  * Created by yagodar on 10.09.2015.
- * Inspired by <a href:"https://github.com/pnikosis/materialish-progress">Nico Hormazábal</a>
+ * Inspired by <a href="https://github.com/pnikosis/materialish-progress">Nico Hormazábal</a>
  */
 public class MaterialCircularProgressBar extends View {
     private final int barLength = 16;
