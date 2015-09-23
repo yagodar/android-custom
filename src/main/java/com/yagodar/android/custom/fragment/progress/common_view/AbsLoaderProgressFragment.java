@@ -9,8 +9,6 @@ import com.yagodar.android.custom.loader.ILoaderCallback;
 import com.yagodar.android.custom.loader.LoaderCallback;
 import com.yagodar.android.custom.loader.LoaderResult;
 
-import java.util.Set;
-
 /**
  * Created by yagodar on 18.06.2015.
  */
@@ -28,8 +26,8 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
     }
 
     @Override
-    public Set<Integer> getHiddenLoaderIdSet() {
-        return mLoaderProgressContext.getHiddenLoaderIdSet();
+    public ProgressShowType getProgressShowType(int loaderId) {
+        return mLoaderProgressContext.getProgressShowType(loaderId);
     }
 
     @Override
@@ -38,13 +36,13 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
     }
 
     @Override
-    public void startLoading(int loaderId, Bundle args, boolean hidden) {
-        mLoaderProgressContext.startLoading(loaderId, args, hidden);
+    public void startLoading(int loaderId, Bundle args, ProgressShowType progressShowType) {
+        mLoaderProgressContext.startLoading(loaderId, args, progressShowType);
     }
 
     @Override
-    public void finishLoading(int loaderId) {
-        mLoaderProgressContext.finishLoading(loaderId);
+    public void finishLoading(int loaderId, LoaderResult loaderResult) {
+        mLoaderProgressContext.finishLoading(loaderId, loaderResult);
     }
 
     @Override

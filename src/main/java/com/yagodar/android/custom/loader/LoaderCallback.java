@@ -9,8 +9,6 @@ import android.widget.Toast;
 import com.yagodar.android.custom.fragment.progress.ILoaderProgressContext;
 import com.yagodar.android.custom.fragment.progress.IProgressContext;
 
-import java.util.Set;
-
 /**
  * Created by yagodar on 23.06.2015.
  */
@@ -23,7 +21,7 @@ public class LoaderCallback implements ILoaderCallback {
 
     @Override
     public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mSrcLoaderProgressContext.finishLoading(loader.getId());
+        mSrcLoaderProgressContext.finishLoading(loader.getId(), loaderResult);
     }
 
     @Override
@@ -40,8 +38,8 @@ public class LoaderCallback implements ILoaderCallback {
         if (!loaderResult.isSuccessful()) {
             Throwable failThrowable = loaderResult.getFailThrowable();
 
-            Set<Integer> hiddenLoaderIdSet = mSrcLoaderProgressContext.getHiddenLoaderIdSet();
-            if(!hiddenLoaderIdSet.contains(loader.getId())) {
+            ILoaderProgressContext.ProgressShowType progressShowType = mSrcLoaderProgressContext.getProgressShowType(loader.getId());
+            if(progressShowType != ILoaderProgressContext.ProgressShowType.HIDDEN) {
                 String failLoaderResult = null;
 
                 Integer failMessageId = loaderResult.getFailMessageId();
