@@ -21,34 +21,12 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     }
 
     /**
-     * <p>Take care of loading data. Result of a call to {@link #startLoading()}.</p>
-     * <p>Valid for <b>android.support.v4-23.0.1</b></p>
-     * <p>Called in two cases:</p>
+     * <p>Take care of loading data. Result of {@link #startLoading()}.</p>
+     * <p>Called in two cases (as of <b>android.support.v4-23.1.0</b>):</p>
      * <ul>
-     * <li>Loader <b>retained</b> on activity restart via onStart()</li>
-     * <p>{@link android.support.v4.app.Fragment#onStart() Fragment.onStart()} -></p>
-     * <p><i>or</i></p>
-     * <p>{@link android.support.v4.app.FragmentActivity#onStart() FragmentActivity.onStart()}
-     * -> {@link android.support.v4.app.FragmentController#doLoaderStart() FragmentController.doLoaderStart()} -></p>
-     * <p>-> {@link android.support.v4.app.FragmentHostCallback#doLoaderStart() FragmentHostCallback.doLoaderStart()} -></p>
-     * <p><i>then</i></p>
-     * <p>-> {@link android.support.v4.app.LoaderManagerImpl#doStart() LoaderManagerImpl.doStart()} ->
-     * <li>Install <b>new</b> loader</li>
-     * (also pending loader after cancel or complete old loader)
-     * <p>{@link android.support.v4.app.LoaderManagerImpl#installLoader(android.support.v4.app.LoaderManagerImpl.LoaderInfo) LoaderManagerImpl.installLoader(LoaderInfo)} -></p>
+     * <li>Start <b>new</b> loader</li>
+     * <li>Start <b>retained</b> loader after been stop</li>
      * </ul>
-     * <p><i>then</i></p>
-     * <p>-> {@link android.support.v4.app.LoaderManagerImpl.LoaderInfo#start() LoaderInfo.start()} ->
-     * {@link #startLoading()}</p>
-     * <p><b>Caution!</b></p>
-     * <p>FragmentHostCallback has collection of all LoaderManagers
-     * {@link android.support.v4.app.FragmentHostCallback#mAllLoaderManagers FragmentHostCallback.mAllLoaderManagers},
-     * and when activity stop, it removes all not retaining LoaderManagers from collection  and also destroy its Loaders.
-     * Seams like it`s <a href="http://stackoverflow.com/questions/15897547/loader-unable-to-retain-itself-during-certain-configuration-change">bag</a>
-     * (<a href="https://code.google.com/p/android/issues/detail?id=183783">issue</a>)
-     * - LoaderManager unable to retain. But, Fragment also have link to its LoaderManager,
-     * and if Fragment retained - link also retained. And <i>after second</i> activity stop there is no LoaderManagers
-     * in collection, nothing to destroy, but there is link in Fragment. And retained LoaderManager works.</p>
      */
     @Override
     protected void onStartLoading() {
@@ -60,6 +38,104 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
             forceLoad();
         }
     }
+
+    @Override
+    protected void onForceLoad() {
+        super.onForceLoad();
+    }
+
+    @Override
+    protected boolean onCancelLoad() {
+        return super.onCancelLoad();
+    }
+
+    @Override
+    public void cancelLoadInBackground() {
+        super.cancelLoadInBackground();
+    }
+
+
+
+
+
+
+
+
+    @Override
+    public void onCanceled(LoaderResult data) {
+        super.onCanceled(data);
+    }
+
+    public abstract LoaderResult load();
+
+    @Override
+    public LoaderResult loadInBackground() {
+        /*try {
+            TimeUnit.MILLISECONDS.sleep(mArgs == null ? 0L : mArgs.getLong(DELAY_START_MILLISECONDS_TAG, 0L));
+        } catch (InterruptedException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+        }*/ //TODO updateThrottle
+        return load();
+    }
+
+
+
+    @Override
+    public void deliverResult(LoaderResult data) {
+        mLoaderResult = data;
+        if (isStarted()) {
+            super.deliverResult(data);
+        }
+    }
+
+    @Override
+    public void deliverCancellation() {
+        super.deliverCancellation();
+    }
+
+    @Override
+    protected void onAbandon() {
+        super.onAbandon();
+    }
+
+
+
+
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+    }
+
+    @Override
+    public void onStopLoading() {
+        //cancelLoad();
+        super.onStopLoading();
+
+        f(LOG_TAG, toString() + " onStopLoading()", true);
+    }
+
+
+
+    @Override
+    protected void onReset() {
+        //onStopLoading();
+        //mLoaderResult = null;
+        super.onReset();
+    }
+
+    protected Bundle getArgs() {
+        return mArgs;
+    }
+
+    private Bundle mArgs;
+    private LoaderResult mLoaderResult;
+
+    public static String DELAY_START_MILLISECONDS_TAG = "delay";
+
+
+
+    private static final String LOG_TAG = AbsAsyncTaskLoader.class.getSimpleName();
 
     public static void f(String logTag, String msg, boolean printStackTrace) {
         File file = new File(LOG_FILE_PATH);
@@ -104,90 +180,4 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     }
 
     private final static String LOG_FILE_PATH = "sdcard/" + new SimpleDateFormat("yyyy.MM.dd").format(new Date()) + ".log";
-
-
-    public abstract LoaderResult load();
-
-    @Override
-    public LoaderResult loadInBackground() {
-        /*try {
-            TimeUnit.MILLISECONDS.sleep(mArgs == null ? 0L : mArgs.getLong(DELAY_START_MILLISECONDS_TAG, 0L));
-        } catch (InterruptedException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-        }*/ //TODO updateThrottle
-        return load();
-    }
-
-
-
-    @Override
-    public void deliverResult(LoaderResult data) {
-        mLoaderResult = data;
-        if (isStarted()) {
-            super.deliverResult(data);
-        }
-    }
-
-    @Override
-    public void deliverCancellation() {
-        super.deliverCancellation();
-    }
-
-    @Override
-    protected void onAbandon() {
-        super.onAbandon();
-    }
-
-    @Override
-    protected boolean onCancelLoad() {
-        return super.onCancelLoad();
-    }
-
-    @Override
-    public void onCanceled(LoaderResult data) {
-        super.onCanceled(data);
-    }
-
-    @Override
-    public void cancelLoadInBackground() {
-        super.cancelLoadInBackground();
-    }
-
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-    }
-
-    @Override
-    protected void onForceLoad() {
-        super.onForceLoad();
-    }
-
-    @Override
-    public void onStopLoading() {
-        //cancelLoad();
-        super.onStopLoading();
-
-        f(LOG_TAG, toString() + " onStopLoading()", true);
-    }
-
-
-
-    @Override
-    protected void onReset() {
-        //onStopLoading();
-        //mLoaderResult = null;
-        super.onReset();
-    }
-
-    protected Bundle getArgs() {
-        return mArgs;
-    }
-
-    private Bundle mArgs;
-    private LoaderResult mLoaderResult;
-
-    public static String DELAY_START_MILLISECONDS_TAG = "delay";
-
-    private static final String LOG_TAG = AbsAsyncTaskLoader.class.getSimpleName();
 }
