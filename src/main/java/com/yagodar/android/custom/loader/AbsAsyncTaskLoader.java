@@ -15,23 +15,39 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     }
 
     /**
-     * <p>Take care of loading data. Result of {@link #startLoading()}.</p>
-     * <p>Called in two cases (as of <b>android.support.v4-23.1.0</b>):</p>
+     * <p>Take care of loading data as per {@link #startLoading()}.</p>
+     * <p>Called in cases (<b>android.support.v4-23.1.0</b>):</p>
      * <ul>
      * <li>Start <b>new</b> loader</li>
-     * <li>Start <b>retained</b> loader after been stop</li>
+     * <li>Start <b>retained</b> loader after being stopped</li>
      * </ul>
      */
     @Override
     protected void onStartLoading() {
         if(DEBUG) {
-            Log.d(TAG, this + " >>> onStartLoading", new Exception());
+            Log.d(TAG, this + " >>> onStartLoading", new ForStackTraceException());
         }
         if (mLoaderResult == null) {
             forceLoad();
         } else {
             deliverResult(mLoaderResult);
         }
+    }
+
+
+    /**
+     * <p>Take care of stopping loader as per {@link #stopLoading()}.</p>
+     * <p>Called in cases (<b>android.support.v4-23.1.0</b>):</p>
+     * <ul>
+     * <li>Associated fragment/activity is being really stopped (not config change).</li>
+     * </ul>
+     */
+    @Override
+    public void onStopLoading() {
+        if(DEBUG) {
+            Log.d(TAG, this + " >>> onStopLoading", new ForStackTraceException());
+        }
+        cancelLoad();
     }
 
     @Override
@@ -106,14 +122,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         super.onContentChanged();
     }
 
-    @Override
-    public void onStopLoading() {
-        if(DEBUG) {
-            Log.d(TAG, this + " >>> onStopLoading", new Exception());
-        }
-        //cancelLoad();
-        super.onStopLoading();
-    }
+
 
 
 
@@ -143,6 +152,9 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     protected Bundle getArgs() {
         return mArgs;
     }
+
+
+    private static class ForStackTraceException extends Exception {}
 
     private Bundle mArgs;
     private LoaderResult mLoaderResult;
