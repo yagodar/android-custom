@@ -14,6 +14,17 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         mArgs = args;
     }
 
+    @Override
+    public void deliverResult(LoaderResult data) {
+        if(DEBUG) {
+            Log.d(TAG, this + " >>> deliverResult: data=" + data, new ForStackTraceException());
+        }
+        mLoaderResult = data;
+        if (isStarted()) {
+            super.deliverResult(data);
+        }
+    }
+
     /**
      * <p>Take care of loading data as per {@link #startLoading()}.</p>
      * <p>Called in cases (<b>android.support.v4-23.1.0</b>):</p>
@@ -34,60 +45,38 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         }
     }
 
-
     /**
      * <p>Take care of stopping loader as per {@link #stopLoading()}.</p>
+     * <p>Stops delivery of updates.</p>
      * <p>Called in cases (<b>android.support.v4-23.1.0</b>):</p>
      * <ul>
      * <li>Associated fragment/activity is being really stopped (not config change).</li>
      * </ul>
      */
     @Override
-    public void onStopLoading() {
+    protected void onStopLoading() {
         if(DEBUG) {
             Log.d(TAG, this + " >>> onStopLoading", new ForStackTraceException());
         }
-        cancelLoad();
     }
 
+    /**
+     * <p>Take care of resetting loader as per {@link #reset()}.</p>
+     * <p>Resets the state of the Loader.</p>
+     */
     @Override
-    protected LoaderResult onLoadInBackground() {
-        return super.onLoadInBackground();
-    }
-
-    @Override
-    protected void onForceLoad() {
-        super.onForceLoad();
-    }
-
-    @Override
-    protected boolean onCancelLoad() {
-        return super.onCancelLoad();
-    }
-
-    @Override
-    public void cancelLoadInBackground() {
-        super.cancelLoadInBackground();
-    }
-
-    @Override
-    public void deliverResult(LoaderResult data) {
-        mLoaderResult = data;
-        if (isStarted()) {
-            super.deliverResult(data);
+    protected void onReset() {
+        if(DEBUG) {
+            Log.d(TAG, this + " >>> onReset", new ForStackTraceException());
         }
+        mLoaderResult = null;
     }
-
-
-
 
 
     @Override
     public void onCanceled(LoaderResult data) {
         super.onCanceled(data);
     }
-
-    public abstract LoaderResult load();
 
     @Override
     public LoaderResult loadInBackground() {
@@ -99,55 +88,18 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         return load();
     }
 
-
-
-
-
     @Override
-    public void deliverCancellation() {
-        super.deliverCancellation();
+    protected LoaderResult onLoadInBackground() {
+        return super.onLoadInBackground();
     }
 
     @Override
-    protected void onAbandon() {
-        super.onAbandon();
+    public void cancelLoadInBackground() {
+        super.cancelLoadInBackground();
     }
 
 
-
-
-
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-    }
-
-
-
-
-
-    @Override
-    protected void onReset() {
-        //onStopLoading();
-        //mLoaderResult = null;
-        super.onReset();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public abstract LoaderResult load();
 
     protected Bundle getArgs() {
         return mArgs;
