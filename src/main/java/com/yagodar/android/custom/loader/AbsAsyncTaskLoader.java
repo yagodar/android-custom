@@ -27,7 +27,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
 
     /**
      * <p>Take care of loading data as per {@link #startLoading()}.</p>
-     * <p>Called in cases (<b>android.support.v4-23.1.0</b>):</p>
+     * <p>Called in cases:</p>
      * <ul>
      * <li>Start <b>new</b> loader</li>
      * <li>Start <b>retained</b> loader after being stopped</li>
@@ -48,7 +48,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     /**
      * <p>Take care of stopping loader as per {@link #stopLoading()}.</p>
      * <p>Stops delivery of updates.</p>
-     * <p>Called in cases (<b>android.support.v4-23.1.0</b>):</p>
+     * <p>Called in cases:</p>
      * <ul>
      * <li>Associated fragment/activity is being really stopped (not config change).</li>
      * </ul>
