@@ -3,7 +3,10 @@ package com.yagodar.android.custom.loader;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.os.OperationCanceledException;
 import android.util.Log;
+
+import com.yagodar.essential.ForStackTraceException;
 
 /**
  * Created by yagodar on 19.06.2015.
@@ -23,6 +26,33 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         if (isStarted()) {
             super.deliverResult(data);
         }
+    }
+
+    @Override
+    public void onCanceled(LoaderResult data) {
+        if(DEBUG) {
+            Log.d(TAG, this + " >>> onCanceled", new ForStackTraceException());
+        }
+        super.onCanceled(data);
+    }
+
+    @Override
+    public LoaderResult loadInBackground() {
+        if(DEBUG) {
+            Log.d(TAG, this + " >>> loadInBackground", new ForStackTraceException());
+        }
+        if (isLoadInBackgroundCanceled()) {
+            throw new OperationCanceledException();
+        }
+        return load();
+    }
+
+    @Override
+    public void cancelLoadInBackground() {
+        if(DEBUG) {
+            Log.d(TAG, this + " >>> cancelLoadInBackground", new ForStackTraceException());
+        }
+        super.cancelLoadInBackground();
     }
 
     /**
@@ -58,61 +88,36 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         if(DEBUG) {
             Log.d(TAG, this + " >>> onStopLoading", new ForStackTraceException());
         }
+        cancelLoad();
     }
 
-    /**
-     * <p>Take care of resetting loader as per {@link #reset()}.</p>
-     * <p>Resets the state of the Loader.</p>
-     */
+    @Override
+    protected void onAbandon() {
+        if(DEBUG) {
+            Log.d(TAG, this + " >>> onAbandon", new ForStackTraceException());
+        }
+        super.onAbandon();
+    }
+
     @Override
     protected void onReset() {
         if(DEBUG) {
             Log.d(TAG, this + " >>> onReset", new ForStackTraceException());
         }
+        onStopLoading();
         mLoaderResult = null;
     }
 
-
-    @Override
-    public void onCanceled(LoaderResult data) {
-        super.onCanceled(data);
-    }
-
-    @Override
-    public LoaderResult loadInBackground() {
-        /*try {
-            TimeUnit.MILLISECONDS.sleep(mArgs == null ? 0L : mArgs.getLong(DELAY_START_MILLISECONDS_TAG, 0L));
-        } catch (InterruptedException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }*/ //TODO updateThrottle
-        return load();
-    }
-
-    @Override
-    protected LoaderResult onLoadInBackground() {
-        return super.onLoadInBackground();
-    }
-
-    @Override
-    public void cancelLoadInBackground() {
-        super.cancelLoadInBackground();
-    }
-
-
-    public abstract LoaderResult load();
+    abstract public LoaderResult load();
 
     protected Bundle getArgs() {
         return mArgs;
     }
 
-
-    private static class ForStackTraceException extends Exception {}
-
     private Bundle mArgs;
     private LoaderResult mLoaderResult;
 
-    private static final boolean DEBUG = true;
-    public static final String TAG = AbsAsyncTaskLoader.class.getSimpleName();
+    private static final boolean DEBUG = false;
 
-    public static String DELAY_START_MILLISECONDS_TAG = "delay";
+    public static final String TAG = AbsAsyncTaskLoader.class.getSimpleName();
 }
