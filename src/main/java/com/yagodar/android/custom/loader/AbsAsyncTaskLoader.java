@@ -108,7 +108,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         mLoaderResult = null;
     }
 
-    abstract public LoaderResult load();
+    public abstract LoaderResult load();
 
     protected Bundle getArgs() {
         return mArgs;
