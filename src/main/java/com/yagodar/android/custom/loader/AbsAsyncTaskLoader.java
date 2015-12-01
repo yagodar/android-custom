@@ -3,6 +3,7 @@ package com.yagodar.android.custom.loader;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.os.CancellationSignal;
 import android.support.v4.os.OperationCanceledException;
 import android.util.Log;
 
@@ -31,20 +32,51 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     @Override
     public void onCanceled(LoaderResult data) {
         if(DEBUG) {
-            Log.d(TAG, this + " >>> onCanceled", new ForStackTraceException());
+            Log.d(TAG, this + " >>> onCanceled: data=" + data, new ForStackTraceException());
         }
-        super.onCanceled(data);
+        mLoaderResult = data;
     }
 
     @Override
     public LoaderResult loadInBackground() {
-        if(DEBUG) {
+        if (DEBUG) {
             Log.d(TAG, this + " >>> loadInBackground", new ForStackTraceException());
         }
-        if (isLoadInBackgroundCanceled()) {
-            throw new OperationCanceledException();
+        synchronized (this) {
+            if (isLoadInBackgroundCanceled()) {
+                OperationCanceledException e = new OperationCanceledException();
+                if (DEBUG) {
+                    Log.d(TAG, this + " >>> loadInBackground throw OperationCanceledException", e);
+                }
+                throw e;
+            }
+            if (mLoaderResult != null) {
+                if (DEBUG) {
+                    Log.d(TAG, this + " >>> loadInBackground return existing mLoaderResult: " + mLoaderResult, new ForStackTraceException());
+                }
+                return mLoaderResult;
+            }
+            if (DEBUG) {
+                Log.d(TAG, this + " >>> loadInBackground mCancellationSignal -> new", new ForStackTraceException());
+            }
+            mCancellationSignal = new CancellationSignal();
         }
-        return load();
+
+        try {
+            return load(mCancellationSignal);
+        } catch (OperationCanceledException e) {
+            if (DEBUG) {
+                Log.d(TAG, this + " >>> loadInBackground catch OperationCanceledException", e);
+            }
+            throw e;
+        } finally {
+            synchronized (this) {
+                if (DEBUG) {
+                    Log.d(TAG, this + " >>> loadInBackground finally mCancellationSignal -> null", new ForStackTraceException());
+                }
+                mCancellationSignal = null;
+            }
+        }
     }
 
     @Override
@@ -53,6 +85,11 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
             Log.d(TAG, this + " >>> cancelLoadInBackground", new ForStackTraceException());
         }
         super.cancelLoadInBackground();
+        synchronized (this) {
+            if (mCancellationSignal != null) {
+                mCancellationSignal.cancel();
+            }
+        }
     }
 
     /**
@@ -108,7 +145,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         mLoaderResult = null;
     }
 
-    public abstract LoaderResult load();
+    public abstract LoaderResult load(CancellationSignal signal);
 
     protected Bundle getArgs() {
         return mArgs;
@@ -116,6 +153,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
 
     private Bundle mArgs;
     private LoaderResult mLoaderResult;
+    private CancellationSignal mCancellationSignal;
 
     private static final boolean DEBUG = false;
 

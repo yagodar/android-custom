@@ -13,6 +13,12 @@ public class LoaderResult extends OperationResult<Bundle> {
         super();
     }
 
+    @Override
+    public String toString() {
+        return super.toString()
+                + " NotifyDataSet[" + mNotifyDataSet + "]";
+    }
+
     public boolean isNotifyDataSet() {
         return mNotifyDataSet;
     }
