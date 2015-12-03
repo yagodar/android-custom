@@ -155,7 +155,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
     private LoaderResult mLoaderResult;
     private CancellationSignal mCancellationSignal;
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     public static final String TAG = AbsAsyncTaskLoader.class.getSimpleName();
 }
