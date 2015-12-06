@@ -7,7 +7,7 @@ import android.support.v4.os.CancellationSignal;
 import android.support.v4.os.OperationCanceledException;
 import android.util.Log;
 
-import com.yagodar.essential.ForStackTraceException;
+import com.yagodar.essential.exception.ForStackTraceException;
 
 /**
  * Created by yagodar on 19.06.2015.
