@@ -15,8 +15,11 @@ public class LoaderResult extends OperationResult<Bundle> {
 
     @Override
     public String toString() {
-        return super.toString()
-                + " NotifyDataSet[" + mNotifyDataSet + "]";
+        StringBuilder sb = new StringBuilder(super.toString());
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(" notify=").append(mNotifyDataSet);
+        sb.append("}");
+        return sb.toString();
     }
 
     public boolean isNotifyDataSet() {
