@@ -21,6 +21,21 @@ public abstract class AbsLoaderProgressRecyclerViewFragment extends ProgressRecy
     }
 
     @Override
+    public void startLoading(int loaderId, Bundle args) {
+        mLoaderProgressContext.startLoading(loaderId, args);
+    }
+
+    @Override
+    public void finishLoading(int loaderId, LoaderResult loaderResult) {
+        mLoaderProgressContext.finishLoading(loaderId, loaderResult);
+    }
+
+    @Override
+    public void startLoading(int loaderId, Bundle args, ProgressShowType progressShowType) {
+        mLoaderProgressContext.startLoading(loaderId, args, progressShowType);
+    }
+
+    @Override
     public void setAvailable(boolean available) {
         mLoaderProgressContext.setAvailable(available);
     }
@@ -31,33 +46,18 @@ public abstract class AbsLoaderProgressRecyclerViewFragment extends ProgressRecy
     }
 
     @Override
-    public void startLoading(int loaderId, Bundle args) {
-        mLoaderProgressContext.startLoading(loaderId, args);
-    }
-
-    @Override
-    public void startLoading(int loaderId, Bundle args, ProgressShowType progressShowType) {
-        mLoaderProgressContext.startLoading(loaderId, args, progressShowType);
-    }
-
-    @Override
-    public void finishLoading(int loaderId, LoaderResult loaderResult) {
-        mLoaderProgressContext.finishLoading(loaderId, loaderResult);
-    }
-
-    @Override
     public void onLoadFinished(Loader<LoaderResult> loader, LoaderResult loaderResult) {
         mLoaderCallback.onLoadFinished(loader, loaderResult);
     }
 
     @Override
-    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mLoaderCallback.onLoaderResult(loader, loaderResult);
+    public void onLoaderReset(Loader<LoaderResult> loader) {
+        mLoaderCallback.onLoaderReset(loader);
     }
 
     @Override
-    public void onLoaderReset(Loader<LoaderResult> loader) {
-        mLoaderCallback.onLoaderReset(loader);
+    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
+        mLoaderCallback.onLoaderResult(loader, loaderResult);
     }
 
     private LoaderProgressContext mLoaderProgressContext;

@@ -23,35 +23,13 @@ public class LoaderProgressContext implements ILoaderProgressContext {
     }
 
     @Override
-    public void startLoading(int loaderId, Bundle args, ProgressShowType progressShowType) {
-        mProgressShowTypeByLoaderId.put(loaderId, progressShowType);
-
-        boolean setNotAvailable = true;
-        switch (progressShowType) {
-            case NORMAL:
-                setNotAvailable = true;
-                break;
-            case HIDDEN:
-                setNotAvailable = false;
-                break;
-            default:
-                break;
-        }
-        if(setNotAvailable) {
-            mSrcLoaderProgressContext.setAvailable(false);
-        }
-
-        mSrcLoaderProgressContext.getLoaderManager().initLoader(loaderId, args, mLoaderCallback);
+    public Activity getActivity() {
+        return mSrcLoaderProgressContext.getActivity();
     }
 
     @Override
-    public void setAvailable(boolean available) {
-        mProgressContext.setContentShown(available);
-    }
-
-    @Override
-    public ProgressShowType getProgressShowType(int loaderId) {
-        return mProgressShowTypeByLoaderId.get(loaderId);
+    public LoaderManager getLoaderManager() {
+        return mSrcLoaderProgressContext.getLoaderManager();
     }
 
     @Override
@@ -81,13 +59,35 @@ public class LoaderProgressContext implements ILoaderProgressContext {
     }
 
     @Override
-    public Activity getActivity() {
-        return mSrcLoaderProgressContext.getActivity();
+    public void startLoading(int loaderId, Bundle args, ProgressShowType progressShowType) {
+        mProgressShowTypeByLoaderId.put(loaderId, progressShowType);
+
+        boolean setNotAvailable = true;
+        switch (progressShowType) {
+            case NORMAL:
+                setNotAvailable = true;
+                break;
+            case HIDDEN:
+                setNotAvailable = false;
+                break;
+            default:
+                break;
+        }
+        if(setNotAvailable) {
+            mSrcLoaderProgressContext.setAvailable(false);
+        }
+
+        mSrcLoaderProgressContext.getLoaderManager().initLoader(loaderId, args, mLoaderCallback);
     }
 
     @Override
-    public LoaderManager getLoaderManager() {
-        return mSrcLoaderProgressContext.getLoaderManager();
+    public void setAvailable(boolean available) {
+        mProgressContext.setContentShown(available);
+    }
+
+    @Override
+    public ProgressShowType getProgressShowType(int loaderId) {
+        return mProgressShowTypeByLoaderId.get(loaderId);
     }
 
     private IProgressContext mProgressContext;

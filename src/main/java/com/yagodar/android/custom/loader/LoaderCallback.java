@@ -20,11 +20,6 @@ public class LoaderCallback implements ILoaderCallback {
     }
 
     @Override
-    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mSrcLoaderProgressContext.finishLoading(loader.getId(), loaderResult);
-    }
-
-    @Override
     public Loader<LoaderResult> onCreateLoader(int id, Bundle args) {
         return mSrcLoaderCallback.onCreateLoader(id, args);
     }
@@ -81,6 +76,11 @@ public class LoaderCallback implements ILoaderCallback {
 
     @Override
     public void onLoaderReset(Loader<LoaderResult> loader) {}
+
+    @Override
+    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
+        mSrcLoaderProgressContext.finishLoading(loader.getId(), loaderResult);
+    }
 
     private IProgressContext mProgressContext;
     private ILoaderCallback mSrcLoaderCallback;
