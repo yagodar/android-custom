@@ -9,8 +9,9 @@ import com.yagodar.essential.operation.OperationResult;
  */
 public class LoaderResult extends OperationResult<Bundle> {
 
-    public LoaderResult() {
+    public LoaderResult(Bundle loaderArgs) {
         super();
+        mLoaderArgs = loaderArgs;
     }
 
     @Override
@@ -22,6 +23,10 @@ public class LoaderResult extends OperationResult<Bundle> {
         return sb.toString();
     }
 
+    public Bundle getLoaderArgs() {
+        return mLoaderArgs;
+    }
+
     public boolean isNotifyDataSet() {
         return mNotifyDataSet;
     }
@@ -31,4 +36,6 @@ public class LoaderResult extends OperationResult<Bundle> {
     }
 
     private boolean mNotifyDataSet;
+
+    private final Bundle mLoaderArgs;
 }

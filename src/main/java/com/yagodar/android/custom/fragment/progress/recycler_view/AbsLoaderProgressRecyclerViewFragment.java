@@ -31,8 +31,8 @@ public abstract class AbsLoaderProgressRecyclerViewFragment extends ProgressRecy
     }
 
     @Override
-    public void setAvailable(boolean available, int id, Bundle args, LoaderResult result) {
-        mLoaderProgressContext.setAvailable(available, id, args, result);
+    public void setAvailable(boolean available, int id, Bundle args) {
+        mLoaderProgressContext.setAvailable(available, id, args);
     }
 
     @Override

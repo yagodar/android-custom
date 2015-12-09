@@ -151,9 +151,10 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         return mArgs;
     }
 
-    private Bundle mArgs;
     private LoaderResult mLoaderResult;
     private CancellationSignal mCancellationSignal;
+
+    private final Bundle mArgs;
 
     private static final boolean DEBUG = true;
 
