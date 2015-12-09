@@ -7,8 +7,8 @@ import android.os.Bundle;
  */
 public interface ILoaderContext extends ILoaderManagerContext {
 
-    void startLoading(int loaderId, Bundle args);
+    void startLoading(int id, Bundle args);
 
-    void finishLoading(int loaderId, LoaderResult loaderResult);
+    void finishLoading(int id, LoaderResult result);
 
 }

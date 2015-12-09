@@ -52,7 +52,7 @@ public class ProgressRecyclerViewFragment extends ProgressFragment {
             } else {
                 // We are starting without an adapter, so assume we won't
                 // have our data right away and start with the progress indicator.
-                setContentShown(false, false);
+                setContentShown(false);
             }
             mHandler.post(mRequestFocus);
         } else {
@@ -83,7 +83,7 @@ public class ProgressRecyclerViewFragment extends ProgressFragment {
             if (!mContentShown && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
                 // adapter.  It is now time to show it.
-                setContentShown(true, getView().getWindowToken() != null);
+                setContentShown(true);
             }
         }
     }

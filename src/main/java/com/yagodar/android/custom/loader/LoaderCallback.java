@@ -25,22 +25,22 @@ public class LoaderCallback implements ILoaderCallback {
     }
 
     @Override
-    public void onLoadFinished(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        if(loaderResult == null) {
+    public void onLoadFinished(Loader<LoaderResult> loader, LoaderResult result) {
+        if(result == null) {
             throw new IllegalArgumentException("Loader Result must not be null!");
         }
 
         //TODO
 
-        if (!loaderResult.isSuccessful()) {
-            Throwable failThrowable = loaderResult.getFailThrowable();
+        if (!result.isSuccessful()) {
+            Throwable failThrowable = result.getFailThrowable();
 
-            ILoaderProgressContext.ProgressShowType progressShowType = mSrcLoaderProgressContext.getProgressShowType(loader.getId());
-            if(progressShowType != ILoaderProgressContext.ProgressShowType.HIDDEN) {
+            //ILoaderProgressContext.ProgressShowType progressShowType = mSrcLoaderProgressContext.getProgressShowType(loader.getId());
+            //if(progressShowType != LoaderFactory.ProgressShowType.HIDDEN) {
                 String failLoaderResult = null;
 
-                Integer failMessageId = loaderResult.getFailMessageId();
-                String failMessage = loaderResult.getFailMessage();
+                Integer failMessageId = result.getFailMessageId();
+                String failMessage = result.getFailMessage();
 
                 if (failMessageId == null) {
                     if (failMessage == null) {
@@ -54,7 +54,7 @@ public class LoaderCallback implements ILoaderCallback {
                     }
                 } else {
                     try {
-                        failLoaderResult = mProgressContext.getActivity().getResources().getString(loaderResult.getFailMessageId());
+                        failLoaderResult = mProgressContext.getActivity().getResources().getString(result.getFailMessageId());
                     } catch (Resources.NotFoundException ignored) {
                     }
 
@@ -64,22 +64,22 @@ public class LoaderCallback implements ILoaderCallback {
                 }
 
                 Toast.makeText(mProgressContext.getActivity().getApplicationContext(), failLoaderResult, Toast.LENGTH_SHORT).show();
-            }
+            //}
 
             if(failThrowable != null) {
                 Log.e(mProgressContext.getClass().getSimpleName(), failThrowable.getMessage(), failThrowable);
             }
         }
 
-        mSrcLoaderCallback.onLoaderResult(loader, loaderResult);
+        mSrcLoaderCallback.onLoaderResult(loader, result);
     }
 
     @Override
     public void onLoaderReset(Loader<LoaderResult> loader) {}
 
     @Override
-    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mSrcLoaderProgressContext.finishLoading(loader.getId(), loaderResult);
+    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult result) {
+        mSrcLoaderProgressContext.finishLoading(loader.getId(), result);
     }
 
     private IProgressContext mProgressContext;

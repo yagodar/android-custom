@@ -21,28 +21,18 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
     }
 
     @Override
-    public void startLoading(int loaderId, Bundle args) {
-        mLoaderProgressContext.startLoading(loaderId, args);
+    public void startLoading(int id, Bundle args) {
+        mLoaderProgressContext.startLoading(id, args);
     }
 
     @Override
-    public void finishLoading(int loaderId, LoaderResult loaderResult) {
-        mLoaderProgressContext.finishLoading(loaderId, loaderResult);
+    public void finishLoading(int id, LoaderResult result) {
+        mLoaderProgressContext.finishLoading(id, result);
     }
 
     @Override
-    public void startLoading(int loaderId, Bundle args, ProgressShowType progressShowType) {
-        mLoaderProgressContext.startLoading(loaderId, args, progressShowType);
-    }
-
-    @Override
-    public void setAvailable(boolean available) {
-        mLoaderProgressContext.setAvailable(available);
-    }
-
-    @Override
-    public ProgressShowType getProgressShowType(int loaderId) {
-        return mLoaderProgressContext.getProgressShowType(loaderId);
+    public void setAvailable(boolean available, int id, Bundle args, LoaderResult result) {
+        mLoaderProgressContext.setAvailable(available, id, args, result);
     }
 
     @Override
@@ -56,8 +46,8 @@ public abstract class AbsLoaderProgressFragment extends ProgressFragment impleme
     }
 
     @Override
-    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult) {
-        mLoaderCallback.onLoaderResult(loader, loaderResult);
+    public void onLoaderResult(Loader<LoaderResult> loader, LoaderResult result) {
+        mLoaderCallback.onLoaderResult(loader, result);
     }
 
     private LoaderProgressContext mLoaderProgressContext;

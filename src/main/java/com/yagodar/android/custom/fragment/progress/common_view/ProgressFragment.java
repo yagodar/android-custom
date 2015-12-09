@@ -39,7 +39,24 @@ public class ProgressFragment extends Fragment implements IProgressContext {
 
     @Override
     public void setContentShown(boolean shown) {
-        setContentShown(shown, true);
+        if (mContentShown == shown) {
+            return;
+        }
+
+        ensureContainers();
+
+        mContentShown = shown;
+        if (mContentShown) {
+            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            mProgressContainer.setVisibility(View.GONE);
+            mContentContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+            mContentContainer.setVisibility(View.VISIBLE);
+        } else {
+            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+            mProgressContainer.setVisibility(View.VISIBLE);
+            mContentContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            mContentContainer.setVisibility(View.GONE);
+        }
     }
 
     public View getContentView() {
@@ -73,41 +90,6 @@ public class ProgressFragment extends Fragment implements IProgressContext {
         }
     }
 
-    public void setContentShownNoAnimation(boolean shown) {
-        setContentShown(shown, false);
-    }
-
-    protected void setContentShown(boolean shown, boolean animate) {
-        if (mContentShown == shown) {
-            return;
-        }
-
-        ensureContainers();
-
-        mContentShown = shown;
-        if (shown) {
-            if (animate) {
-                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
-                mContentContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
-            } else {
-                mProgressContainer.clearAnimation();
-                mContentContainer.clearAnimation();
-            }
-            mProgressContainer.setVisibility(View.GONE);
-            mContentContainer.setVisibility(View.VISIBLE);
-        } else {
-            if (animate) {
-                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
-                mContentContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
-            } else {
-                mProgressContainer.clearAnimation();
-                mContentContainer.clearAnimation();
-            }
-            mProgressContainer.setVisibility(View.VISIBLE);
-            mContentContainer.setVisibility(View.GONE);
-        }
-    }
-
     protected void ensure() {
         ensureContainers();
         ensureContent();
@@ -118,7 +100,7 @@ public class ProgressFragment extends Fragment implements IProgressContext {
             return;
         }
 
-        setContentShown(false, false);
+        setContentShown(false);
     }
 
     private void ensureContainers() {

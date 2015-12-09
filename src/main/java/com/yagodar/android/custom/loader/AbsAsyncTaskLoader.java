@@ -141,7 +141,7 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         if(DEBUG) {
             Log.d(TAG, this + " >>> onReset", new ForStackTraceException());
         }
-        onStopLoading();
+        cancelLoad();
         mLoaderResult = null;
     }
 

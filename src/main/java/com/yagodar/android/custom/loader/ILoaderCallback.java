@@ -8,6 +8,6 @@ import android.support.v4.content.Loader;
  */
 public interface ILoaderCallback extends LoaderManager.LoaderCallbacks<LoaderResult> {
 
-    void onLoaderResult(Loader<LoaderResult> loader, LoaderResult loaderResult);
+    void onLoaderResult(Loader<LoaderResult> loader, LoaderResult result);
 
 }
