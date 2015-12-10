@@ -7,7 +7,7 @@ import com.yagodar.essential.operation.OperationResult;
 /**
  * Created by yagodar on 17.06.2015.
  */
-public class LoaderResult extends OperationResult<Bundle> {
+public class LoaderResult extends OperationResult<Object> {
 
     public LoaderResult(Bundle loaderArgs) {
         super();

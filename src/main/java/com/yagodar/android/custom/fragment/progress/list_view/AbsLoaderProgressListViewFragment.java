@@ -31,8 +31,13 @@ public abstract class AbsLoaderProgressListViewFragment extends ProgressListView
     }
 
     @Override
-    public void setAvailable(boolean available, int id, Bundle args) {
-        mLoaderProgressContext.setAvailable(available, id, args);
+    public void onStartLoading(int id, Bundle args) {
+        mLoaderProgressContext.onStartLoading(id, args);
+    }
+
+    @Override
+    public void onFinishLoading(int id, LoaderResult result) {
+        mLoaderProgressContext.onFinishLoading(id, result);
     }
 
     @Override

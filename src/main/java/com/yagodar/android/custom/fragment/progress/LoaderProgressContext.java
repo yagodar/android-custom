@@ -33,7 +33,7 @@ public class LoaderProgressContext implements ILoaderProgressContext {
     public void startLoading(int id, Bundle args) {
         Loader<LoaderResult> loader = mSrcLoaderProgressContext.getLoaderManager().getLoader(id);
         if(loader == null) {
-            mSrcLoaderProgressContext.setAvailable(false, id, args);
+            mSrcLoaderProgressContext.onStartLoading(id, args);
         }
         mSrcLoaderProgressContext.getLoaderManager().initLoader(id, args, mLoaderCallback);
     }
@@ -41,12 +41,17 @@ public class LoaderProgressContext implements ILoaderProgressContext {
     @Override
     public void finishLoading(int id, LoaderResult result) {
         mSrcLoaderProgressContext.getLoaderManager().destroyLoader(id);
-        mSrcLoaderProgressContext.setAvailable(true, id, result != null ? result.getLoaderArgs() : null);
+        mSrcLoaderProgressContext.onFinishLoading(id, result);
     }
 
     @Override
-    public void setAvailable(boolean available, int id, Bundle args) {
-        mProgressContext.setContentShown(available);
+    public void onStartLoading(int id, Bundle args) {
+        mProgressContext.setContentShown(false);
+    }
+
+    @Override
+    public void onFinishLoading(int id, LoaderResult result) {
+        mProgressContext.setContentShown(true);
     }
 
     private IProgressContext mProgressContext;
