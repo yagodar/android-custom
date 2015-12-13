@@ -63,7 +63,12 @@ public abstract class AbsAsyncTaskLoader extends AsyncTaskLoader<LoaderResult> {
         }
 
         try {
-            return load(mCancellationSignal);
+            LoaderResult loaderResult = load(mCancellationSignal);
+            loaderResult.setArgs(mArgs);
+            if(DEBUG) {
+                Log.d(TAG, this + " >>> load loaderResult=" + loaderResult, new ForStackTraceException());
+            }
+            return loaderResult;
         } catch (OperationCanceledException e) {
             if (DEBUG) {
                 Log.d(TAG, this + " >>> loadInBackground catch OperationCanceledException", e);

@@ -2,40 +2,73 @@ package com.yagodar.android.custom.loader;
 
 import android.os.Bundle;
 
+import com.yagodar.essential.operation.OperationArgsResult;
 import com.yagodar.essential.operation.OperationResult;
 
 /**
  * Created by yagodar on 17.06.2015.
  */
-public class LoaderResult extends OperationResult<Object> {
+public class LoaderResult extends OperationArgsResult<Bundle, OperationResult> {
 
-    public LoaderResult(Bundle loaderArgs) {
+    public LoaderResult() {
         super();
-        mLoaderArgs = loaderArgs;
+    }
+
+    public LoaderResult(OperationResult data) {
+        super(data);
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder(super.toString());
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append(" notify=").append(mNotifyDataSet);
-        sb.append("}");
-        return sb.toString();
+    public boolean isSuccessful() {
+        OperationResult opResult = getData();
+        if(opResult == null) {
+            return true;
+        }
+        return opResult.isSuccessful();
     }
 
-    public Bundle getLoaderArgs() {
-        return mLoaderArgs;
+    @Override
+    public String getFailMessage() {
+        OperationResult opResult = getData();
+        if(opResult == null) {
+            return null;
+        }
+        return opResult.getFailMessage();
     }
 
-    public boolean isNotifyDataSet() {
-        return mNotifyDataSet;
+    @Deprecated
+    @Override
+    public void setFailMessage(String message) {
+        throw new UnsupportedOperationException("Set fail message not supported!");
     }
 
-    public void setNotifyDataSet(boolean needNotifyDataSetChanged) {
-        mNotifyDataSet = needNotifyDataSetChanged;
+    @Override
+    public Integer getFailMessageId() {
+        OperationResult opResult = getData();
+        if(opResult == null) {
+            return null;
+        }
+        return opResult.getFailMessageId();
     }
 
-    private boolean mNotifyDataSet;
+    @Deprecated
+    @Override
+    public void setFailMessageId(Integer messageId) {
+        throw new UnsupportedOperationException("Set fail message id not supported!");
+    }
 
-    private final Bundle mLoaderArgs;
+    @Override
+    public Throwable getFailThrowable() {
+        OperationResult opResult = getData();
+        if(opResult == null) {
+            return null;
+        }
+        return opResult.getFailThrowable();
+    }
+
+    @Deprecated
+    @Override
+    public void setFailThrowable(Throwable throwable) {
+        throw new UnsupportedOperationException("Set fail throwable not supported!");
+    }
 }
