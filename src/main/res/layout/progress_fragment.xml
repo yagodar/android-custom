@@ -26,12 +26,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <LinearLayout
             android:id="@android:id/empty"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/empty_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxWidth="148dp"
+            android:maxHeight="148dp"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:paddingTop="4dp" />
+
+        </LinearLayout>
 
     </FrameLayout>
 

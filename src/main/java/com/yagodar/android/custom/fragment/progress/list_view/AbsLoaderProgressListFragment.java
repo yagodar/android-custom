@@ -12,9 +12,9 @@ import com.yagodar.android.custom.loader.LoaderResult;
 /**
  * Created by yagodar on 18.06.2015.
  */
-public abstract class AbsLoaderProgressListViewFragment extends ProgressListViewFragment implements ILoaderProgressContext, ILoaderCallback {
+public abstract class AbsLoaderProgressListFragment extends ProgressListFragment implements ILoaderProgressContext, ILoaderCallback {
 
-    public AbsLoaderProgressListViewFragment() {
+    public AbsLoaderProgressListFragment() {
         super();
         mLoaderCallback = new LoaderCallback(this, this, this);
         mLoaderProgressContext = new LoaderProgressContext(this, mLoaderCallback, this);

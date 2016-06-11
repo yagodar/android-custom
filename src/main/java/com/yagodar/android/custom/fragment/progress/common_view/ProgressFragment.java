@@ -14,7 +14,7 @@ import com.yagodar.android.custom.fragment.progress.IProgressContext;
 /**
  * Created by yagodar on 06.03.2015.
  */
-public class ProgressFragment extends Fragment implements IProgressContext {
+public class ProgressFragment<T extends View> extends Fragment implements IProgressContext {
 
     public ProgressFragment() {}
 
@@ -59,21 +59,25 @@ public class ProgressFragment extends Fragment implements IProgressContext {
         }
     }
 
-    public View getContentView() {
+    public T getContentView() {
         return mContentView;
     }
 
     public void setContentView(int layoutResId) {
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View contentView = layoutInflater.inflate(layoutResId, null);
+        T contentView;
+        try {
+            contentView = (T) layoutInflater.inflate(layoutResId, null);
+        } catch(ClassCastException e) {
+            throw new IllegalArgumentException("Content view must be of proper type!");
+        }
         setContentView(contentView);
     }
 
-    public void setContentView(View view) {
+    public void setContentView(T view) {
         if(view == null) {
             throw new IllegalArgumentException("Content view must not be null!");
         }
-
         ensureContainers();
         if (mContentContainer instanceof ViewGroup) {
             ViewGroup contentContainer = (ViewGroup) mContentContainer;
@@ -88,6 +92,20 @@ public class ProgressFragment extends Fragment implements IProgressContext {
         } else {
             throw new IllegalStateException("Content Container must be ViewGroup!");
         }
+        invalidateContent();
+        ensureContent();
+    }
+
+    protected boolean isContentShown() {
+        return mContentShown;
+    }
+
+    protected boolean isContentEnsured() {
+        return mContentEnsured;
+    }
+
+    protected void invalidateContent() {
+        mContentEnsured = false;
     }
 
     protected void ensure() {
@@ -96,11 +114,11 @@ public class ProgressFragment extends Fragment implements IProgressContext {
     }
 
     protected void ensureContent() {
-        if(mContentView != null) {
+        if(isContentEnsured()) {
             return;
         }
-
         setContentShown(false);
+        mContentEnsured = true;
     }
 
     private void ensureContainers() {
@@ -120,8 +138,9 @@ public class ProgressFragment extends Fragment implements IProgressContext {
         }
     }
 
-    protected View mContentView;
-    protected View mProgressContainer;
-    protected View mContentContainer;
-    protected boolean mContentShown;
+    private T mContentView;
+    private boolean mContentEnsured;
+    private View mProgressContainer;
+    private View mContentContainer;
+    private boolean mContentShown;
 }

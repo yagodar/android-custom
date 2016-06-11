@@ -5,55 +5,34 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.yagodar.android.custom.R;
-import com.yagodar.android.custom.fragment.progress.common_view.ProgressFragment;
+import com.yagodar.android.custom.fragment.progress.emptyable_view.ProgressEmptyableFragment;
 
 /**
  * Created by yagodar on 18.06.2015.
  */
-public class ProgressListViewFragment extends ProgressFragment {
+public class ProgressListFragment extends ProgressEmptyableFragment<EmptyableListView> {
 
-    public ProgressListViewFragment() {
+    public ProgressListFragment() {
         super();
     }
 
     @Override
     public void onDestroyView() {
         mHandler.removeCallbacks(mRequestFocus);
-        mListView = null;
-        mEmptyView = null;
         super.onDestroyView();
     }
 
     @Override
-    public void setContentView(View view) {
-        if(view != null && !(view instanceof ListView)) {
-            throw new IllegalArgumentException("Content view must be ListView!");
-        }
-
-        super.setContentView(view);
-        ensureContent();
-    }
-
-    @Override
-    protected void ensure() {
-        super.ensure();
-        ensureEmpty();
-    }
-
-    @Override
     protected void ensureContent() {
-        super.ensureContent();
-
-        if (mListView != null && mListView.equals(mContentView)) {
+        if(isContentEnsured()) {
             return;
         }
-
-        if(mContentView != null) {
-            mListView = (ListView) mContentView;
-            mListView.setOnItemClickListener(mOnClickListener);
+        super.ensureContent();
+        ListView contentView = getContentView();
+        if(contentView != null) {
+            contentView.setOnItemClickListener(mOnClickListener);
             if (mListAdapter != null) {
                 ListAdapter adapter = mListAdapter;
                 mListAdapter = null;
@@ -96,9 +75,10 @@ public class ProgressListViewFragment extends ProgressFragment {
     public void setListAdapter(ListAdapter listAdapter) {
         boolean hadAdapter = mListAdapter != null;
         mListAdapter = listAdapter;
-        if (mListView != null) {
-            mListView.setAdapter(listAdapter);
-            if (!mContentShown && !hadAdapter) {
+        ListView contentView = getContentView();
+        if (contentView != null) {
+            contentView.setAdapter(listAdapter);
+            if (!isContentShown() && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
                 // adapter.  It is now time to show it.
                 setContentShown(true);
@@ -114,7 +94,7 @@ public class ProgressListViewFragment extends ProgressFragment {
      */
     public void setSelection(int position) {
         ensure();
-        mListView.setSelection(position);
+        getContentView().setSelection(position);
     }
 
     /**
@@ -122,7 +102,7 @@ public class ProgressListViewFragment extends ProgressFragment {
      */
     public int getSelectedItemPosition() {
         ensure();
-        return mListView.getSelectedItemPosition();
+        return getContentView().getSelectedItemPosition();
     }
 
     /**
@@ -130,54 +110,17 @@ public class ProgressListViewFragment extends ProgressFragment {
      */
     public long getSelectedItemId() {
         ensure();
-        return mListView.getSelectedItemId();
-    }
-
-    /**
-     * Get the activity's list view widget.
-     */
-    public ListView getListView() {
-        return mListView;
-    }
-
-    public void setEmptyText(int resId) {
-        setEmptyText(getString(resId));
-    }
-
-    /**
-     * The default content for a ListFragment has a TextView that can
-     * be shown when the list is empty.  If you would like to have it
-     * shown, call this method to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence text) {
-        ensure();
-        mEmptyView.setText(text);
-    }
-
-    private void ensureEmpty() {
-        if(mEmptyView != null) {
-            return;
-        }
-
-        View root = getView();
-        mEmptyView = (TextView)root.findViewById(android.R.id.empty);
-
-        if(mEmptyView == null) {
-            throw new IllegalStateException("Can't be used with a custom content view!");
-        }
-
-        mListView.setEmptyView(mEmptyView);
+        return getContentView().getSelectedItemId();
     }
 
     private ListAdapter mListAdapter;
-    private ListView mListView;
-    private TextView mEmptyView;
 
     final private Handler mHandler = new Handler();
 
     final private Runnable mRequestFocus = new Runnable() {
         public void run() {
-            mListView.focusableViewAvailable(mListView);
+            ListView contentView = getContentView();
+            contentView.focusableViewAvailable(contentView);
         }
     };
 

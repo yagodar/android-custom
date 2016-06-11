@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.yagodar.android.custom.fragment.progress.emptyable_view.IEmptyableView;
+
 /**
  * Created by yagodar on 29.04.2016.
  */
-public class EmptyableRecyclerView extends RecyclerView {
+public class EmptyableRecyclerView extends RecyclerView implements IEmptyableView {
     private View mEmptyView;
     private final AdapterDataObserver mEmptyDataObserver = new EmptyDataObserver();
 
@@ -37,6 +39,7 @@ public class EmptyableRecyclerView extends RecyclerView {
         updateEmptyStatus();
     }
 
+    @Override
     public void setEmptyView(View emptyView) {
         mEmptyView = emptyView;
         updateEmptyStatus();
