@@ -54,12 +54,12 @@ public class ProgressListFragment extends ProgressEmptyableFragment<EmptyableLis
      * getListView().getItemAtPosition(position) if they need to access the
      * data associated with the selected item.
      *
-     * @param l The ListView where the click happened
-     * @param v The view that was clicked within the ListView
+     * @param listView The ListView where the click happened
+     * @param view The view that was clicked within the ListView
      * @param position The position of the view in the list
      * @param id The row id of the item that was clicked
      */
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView listView, View view, int position, long id) {
     }
 
     /**
