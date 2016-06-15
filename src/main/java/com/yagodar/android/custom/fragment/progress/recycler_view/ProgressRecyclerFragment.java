@@ -100,21 +100,20 @@ public class ProgressRecyclerFragment extends ProgressEmptyableFragment<Emptyabl
     final private RecyclerView.OnItemTouchListener mOnItemTouchListener = new RecyclerView.SimpleOnItemTouchListener() {
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            mTouchView = rv.findChildViewUnder(e.getX(), e.getY());
-            if(mTouchView == null) {
+            View view = rv.findChildViewUnder(e.getX(), e.getY());
+            if(view == null) {
                 return false;
             }
-            return mGestureDetector.onTouchEvent(e);
+            if(mGestureDetector.onTouchEvent(e)) {
+                onRecyclerItemClick(rv, view, rv.getChildLayoutPosition(view), rv.getChildItemId(view));
+                return true;
+            }
+            return false;
         }
-
-        private View mTouchView;
 
         private GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                EmptyableRecyclerView contentView = getContentView();
-                onRecyclerItemClick(contentView, mTouchView, contentView.getChildLayoutPosition(mTouchView), contentView.getChildItemId(mTouchView));
-                mTouchView = null;
                 return true;
             }
         });
