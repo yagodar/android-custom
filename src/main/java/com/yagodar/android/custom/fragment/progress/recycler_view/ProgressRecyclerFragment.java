@@ -3,9 +3,6 @@ package com.yagodar.android.custom.fragment.progress.recycler_view;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.yagodar.android.custom.R;
 import com.yagodar.android.custom.fragment.progress.emptyable_view.ProgressEmptyableFragment;
@@ -36,7 +33,6 @@ public class ProgressRecyclerFragment extends ProgressEmptyableFragment<Emptyabl
             contentView.setHasFixedSize(true);
             contentView.setLayoutManager(new LinearLayoutManager(getContext()));
             contentView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-            contentView.addOnItemTouchListener(mOnItemTouchListener);
             if (mRecyclerAdapter != null) {
                 RecyclerView.Adapter adapter = mRecyclerAdapter;
                 mRecyclerAdapter = null;
@@ -51,16 +47,6 @@ public class ProgressRecyclerFragment extends ProgressEmptyableFragment<Emptyabl
             setContentView(R.layout.progress_fragment_recycle_view);
         }
     }
-
-    /**
-     * This method will be called when an item in the list is selected.
-     *
-     * @param recyclerView The RecyclerView where the click happened
-     * @param view The view that was clicked within the RecyclerView
-     * @param position The position of the view in the recycler
-     * @param id The row id of the item that was clicked
-     */
-    public void onRecyclerItemClick(RecyclerView recyclerView, View view, int position, long id) {}
 
     /**
      * Get the RecyclerView.Adapter associated with this activity's RecyclerView.
@@ -95,27 +81,5 @@ public class ProgressRecyclerFragment extends ProgressEmptyableFragment<Emptyabl
             EmptyableRecyclerView contentView = getContentView();
             contentView.focusableViewAvailable(contentView);
         }
-    };
-
-    final private RecyclerView.OnItemTouchListener mOnItemTouchListener = new RecyclerView.SimpleOnItemTouchListener() {
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View view = rv.findChildViewUnder(e.getX(), e.getY());
-            if(view == null) {
-                return false;
-            }
-            if(mGestureDetector.onTouchEvent(e)) {
-                onRecyclerItemClick(rv, view, rv.getChildLayoutPosition(view), rv.getChildItemId(view));
-                return true;
-            }
-            return false;
-        }
-
-        private GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
-        });
     };
 }
