@@ -41,18 +41,20 @@ public abstract class AbsRecyclerViewAdapter<M extends Model, H extends AbsRecyc
     }
 
     @Override
-    public abstract H onCreateViewHolder(ViewGroup parent, int viewType);
+    public H onCreateViewHolder(ViewGroup parent, int viewType) {
+        return onCreateViewHolder(createItemView(parent, viewType), mOnClickListener);
+    }
 
     public M getItem(int position) {
         return mListModel.getModel(position);
     }
 
+    protected abstract H onCreateViewHolder(View itemView, View.OnClickListener onClickListener);
+
+    protected abstract View createItemView(ViewGroup parent, int viewType);
+
     protected LayoutInflater getLayoutInflater() {
         return mLayoutInflater;
-    }
-
-    protected View.OnClickListener getOnClickListener() {
-        return mOnClickListener;
     }
 
     protected void setListModel(ListModel<M> listModel) {
