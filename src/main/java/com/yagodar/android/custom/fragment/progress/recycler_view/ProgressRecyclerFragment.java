@@ -2,16 +2,15 @@ package com.yagodar.android.custom.fragment.progress.recycler_view;
 
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.yagodar.android.custom.R;
+import com.yagodar.android.custom.adapter.AbsRecyclerViewAdapter;
 import com.yagodar.android.custom.fragment.progress.emptyable_view.ProgressEmptyableFragment;
 
 /**
  * Created by yagodar on 03.09.2015.
  */
-public class ProgressRecyclerFragment extends ProgressEmptyableFragment<EmptyableRecyclerView> {
-
+public class ProgressRecyclerFragment<T extends AbsRecyclerViewAdapter> extends ProgressEmptyableFragment<EmptyableRecyclerView> {
     public ProgressRecyclerFragment() {
         super();
     }
@@ -34,7 +33,7 @@ public class ProgressRecyclerFragment extends ProgressEmptyableFragment<Emptyabl
             contentView.setLayoutManager(new LinearLayoutManager(getContext()));
             contentView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
             if (mRecyclerAdapter != null) {
-                RecyclerView.Adapter adapter = mRecyclerAdapter;
+                T adapter = mRecyclerAdapter;
                 mRecyclerAdapter = null;
                 setRecyclerAdapter(adapter);
             } else {
@@ -51,14 +50,14 @@ public class ProgressRecyclerFragment extends ProgressEmptyableFragment<Emptyabl
     /**
      * Get the RecyclerView.Adapter associated with this activity's RecyclerView.
      */
-    public RecyclerView.Adapter getRecycleAdapter() {
+    public T getRecycleAdapter() {
         return mRecyclerAdapter;
     }
 
     /**
      * Provide the cursor for the RecyclerView.
      */
-    public void setRecyclerAdapter(RecyclerView.Adapter recyclerAdapter) {
+    public void setRecyclerAdapter(T recyclerAdapter) {
         boolean hadAdapter = mRecyclerAdapter != null;
         mRecyclerAdapter = recyclerAdapter;
         EmptyableRecyclerView contentView = getContentView();
@@ -72,7 +71,7 @@ public class ProgressRecyclerFragment extends ProgressEmptyableFragment<Emptyabl
         }
     }
 
-    private RecyclerView.Adapter mRecyclerAdapter;
+    private T mRecyclerAdapter;
 
     final private Handler mHandler = new Handler();
 

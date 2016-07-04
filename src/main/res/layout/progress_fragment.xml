@@ -12,7 +12,7 @@
         android:visibility="gone"
         android:gravity="center">
 
-        <com.yagodar.android.custom.widget.progress.MaterialCircularProgressBar
+        <com.yagodar.android.custom.widget.MaterialCircularProgressBar
             android:id="@android:id/progress"
             android:layout_width="80dp"
             android:layout_height="80dp"

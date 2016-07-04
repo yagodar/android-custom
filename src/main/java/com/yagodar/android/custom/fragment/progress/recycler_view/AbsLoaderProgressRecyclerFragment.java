@@ -3,6 +3,7 @@ package com.yagodar.android.custom.fragment.progress.recycler_view;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 
+import com.yagodar.android.custom.adapter.AbsRecyclerViewAdapter;
 import com.yagodar.android.custom.fragment.progress.ILoaderProgressContext;
 import com.yagodar.android.custom.fragment.progress.LoaderProgressContext;
 import com.yagodar.android.custom.loader.ILoaderCallback;
@@ -12,8 +13,7 @@ import com.yagodar.android.custom.loader.LoaderResult;
 /**
  * Created by yagodar on 04.09.2015.
  */
-public abstract class AbsLoaderProgressRecyclerFragment extends ProgressRecyclerFragment implements ILoaderProgressContext, ILoaderCallback {
-
+public abstract class AbsLoaderProgressRecyclerFragment<T extends AbsRecyclerViewAdapter> extends ProgressRecyclerFragment<T> implements ILoaderProgressContext, ILoaderCallback {
     public AbsLoaderProgressRecyclerFragment() {
         super();
         mLoaderCallback = new LoaderCallback(this, this, this);

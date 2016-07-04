@@ -1,4 +1,4 @@
-package com.yagodar.android.custom.widget.progress;
+package com.yagodar.android.custom.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
