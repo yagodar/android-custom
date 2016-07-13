@@ -29,6 +29,11 @@ public abstract class AbsMultCancelRepository<T extends Model> implements IMultR
     }
 
     @Override
+    public OperationResult<Integer> loadCount() {
+        return loadCount(null);
+    }
+
+    @Override
     public OperationResult<Long> insert() {
         return insert((CancellationSignal)null);
     }
@@ -73,6 +78,8 @@ public abstract class AbsMultCancelRepository<T extends Model> implements IMultR
     public abstract OperationResult<Map<Long,T>> loadAllMap(CancellationSignal signal);
 
     public abstract OperationResult<List<T>> loadAllList(CancellationSignal signal);
+
+    public abstract OperationResult<Integer> loadCount(CancellationSignal signal);
 
     public abstract OperationResult<Long> insert(CancellationSignal signal);
 

@@ -29,6 +29,11 @@ public abstract class AbsMultGroupCancelRepository<T extends Model> implements I
     }
 
     @Override
+    public OperationResult<Integer> loadGroupCount(long groupId) {
+        return loadGroupCount(groupId, null);
+    }
+
+    @Override
     public OperationResult<Map<Long, Map<Long,T>>> loadAllMap() {
         return loadAllMap(null);
     }
@@ -36,6 +41,11 @@ public abstract class AbsMultGroupCancelRepository<T extends Model> implements I
     @Override
     public OperationResult<Map<Long, List<T>>> loadAllList() {
         return loadAllList(null);
+    }
+
+    @Override
+    public OperationResult<Map<Long, Integer>> loadAllCount() {
+        return loadAllCount(null);
     }
 
     @Override
@@ -99,9 +109,13 @@ public abstract class AbsMultGroupCancelRepository<T extends Model> implements I
 
     public abstract OperationResult<List<T>> loadGroupList(long groupId, CancellationSignal signal);
 
+    public abstract OperationResult<Integer> loadGroupCount(long groupId, CancellationSignal signal);
+
     public abstract OperationResult<Map<Long, Map<Long,T>>> loadAllMap(CancellationSignal signal);
 
     public abstract OperationResult<Map<Long, List<T>>> loadAllList(CancellationSignal signal);
+
+    public abstract OperationResult<Map<Long, Integer>> loadAllCount(CancellationSignal signal);
 
     public abstract OperationResult<Long> insert(long groupId, CancellationSignal signal);
 
